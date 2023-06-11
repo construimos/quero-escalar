@@ -1,23 +1,25 @@
 {
-	"name": "udany-boilerplate",
-	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
-	"scripts": {
-		"dev": "node index.js"
-	},
-	"author": "",
-	"license": "ISC",
-	"dependencies": {
-		"@fortawesome/fontawesome-svg-core": "^1.2.35",
-		"@fortawesome/free-solid-svg-icons": "^5.15.3",
-		"@fortawesome/vue-fontawesome": "^3.0.0-3",
-		"axios": "^0.24.0",
-		"express": "^4.17.1",
-		"fast-glob": "^3.2.5",
-		"udany-base-configs": "construimos/udany-base-configs",
-		"udany-toolbox": "construimos/udany-toolbox",
-		"vue": "^3.2.20",
-		"vue-router": "^4.0.12"
-	}
+  "name": "quero-escalar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bot.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "node bot.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^4.17.17",
+    "dotenv": "^16.1.4",
+    "express": "^4.18.2",
+    "googleapis": "^39.2.0",
+    "node-cron": "^3.0.2",
+    "twilio": "^4.11.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.3.0",
+    "@types/node-cron": "^3.0.7"
+  }
 }
