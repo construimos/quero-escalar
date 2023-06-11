@@ -1,0 +1,23 @@
+{
+	"name": "udany-boilerplate",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"dev": "node index.js"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@fortawesome/fontawesome-svg-core": "^1.2.35",
+		"@fortawesome/free-solid-svg-icons": "^5.15.3",
+		"@fortawesome/vue-fontawesome": "^3.0.0-3",
+		"axios": "^0.24.0",
+		"express": "^4.17.1",
+		"fast-glob": "^3.2.5",
+		"udany-base-configs": "construimos/udany-base-configs",
+		"udany-toolbox": "construimos/udany-toolbox",
+		"vue": "^3.2.20",
+		"vue-router": "^4.0.12"
+	}
+}
