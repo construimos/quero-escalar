@@ -1,0 +1,185 @@
+chat, I want you to IMPROVE the given code:
+import * as gspread from 'gspread';
+import * as credentials from './credentials.json';
+import { MessagingResponse } from 'twilio/lib/twiml/MessagingResponse';
+import express from 'express';
+import { Request, Response } from 'express';
+import twilio from 'twilio';
+
+const app = express();
+const client = twilio(
+  'your_account_sid',
+  'your_auth_token'
+);
+
+// Use creds to create a client to interact with the Google Drive API
+const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
+const SHEET_ID = 'your_sheet_id';
+const SHEET_NAME_1 = 'Horarios';
+const SHEET_NAME_2 = 'Historico';
+const TWILIO_PHONE_NUMBER = 'your_twilio_phone_number';
+
+// Função para obter uma instância autenticada do Google Sheets
+async function getGoogleSheetsClient(sheetName: string) {
+  const doc = new gspread.GoogleSpreadsheet(SHEET_ID);
+  await doc.useServiceAccountAuth(credentials);
+  await doc.loadInfo();
+  return doc.sheetsByTitle[sheetName];
+}
+
+async function sendWhatsAppMessage(to: string, message: string) {
+  await client.messages.create({
+    body: message,
+    from: `whatsapp:${TWILIO_PHONE_NUMBER}`,
+    to: `whatsapp:${to}`
+  });
+}
+
+function getAvailableClimbers() {
+// that returns the number of available climbers for a given day and time
+} 
+
+function getAvailableGuides() {
+  // that returns the number of available guides for a given day and time
+} 
+
+function getDaysAvailable() {
+  // that returns the days available for a given user
+} 
+
+// Note: You should create the following functions (getDiasDisponiveis, getOpcaoHorario,
+// atualizarPlanilhaParticipante, contarGuiasDisponiveis, atualizarPlanilhaGuia,
+// contarParticipantesDisponiveis) according to your logic and needs.
+
+async function processMessage(message: string, senderNumber: string) {
+  if (message.toLowerCase() === 'sim') {
+    await sendWhatsAppMessage(senderNumber, 'Você é participante ou guia?');
+    await sendWhatsAppMessage(senderNumber, 'Quais dias da semana você está disponível?');
+    await sendWhatsAppMessage(senderNumber, 'Você está disponível em qualquer horário ou deseja especificar horários?');
+    // Continue with your logic...
+  } else {
+    await sendWhatsAppMessage(senderNumber, 'Desculpe, não entendi sua resposta. Por favor, tente novamente.');
+    await sendWhatsAppMessage(senderNumber, 'Você gostaria de reiniciar o fluxo?');
+    // Continue with error handling logic...
+  }
+}
+
+
+interface User {
+  Nome: string;
+  Telefone: string;
+  TipoParticipante: string;
+  Dias: string[];
+  Tempo: string[];
+}
+
+
+async function processMessage(message: string, senderNumber: string) {
+  let userPlanilha: any = {
+    Nome: senderNumber,
+    Telefone: senderNumber,
+    TipoParticipante: '',
+    Segunda: '', // Example date and time
+    Terca: '',
+    Quarta: '',
+    Quinta: '',
+    Sexta: '',
+    Sabado: '',
+    Domingo: ''
+  };
+  
+  // Simulate the state machine of your chat flow with if-else statements
+  if (message.toLowerCase() === 'sim') {
+    userPlanilha = {
+          Segunda: 'manha', // Example date and time
+          Terca: 'tarde',
+          Quarta: 'dia',
+          Quinta: '',
+          Sexta: '',
+          Sabado: '',
+          Domingo: ''
+      }; 
+    
+    
+    // Assume senderNumber is the name for simplicity
+
+
+    await sendWhatsAppMessage(senderNumber, 'Você é participante ou primeiro de cordada?');
+  } else if (message.toLowerCase() === 'participante' || message.toLowerCase() === 'primeiro de cordada') {
+    user.TipoParticipante = message;
+    await sendWhatsAppMessage(senderNumber, 'Quais dias da semana você está disponível?');
+  } 
+  // Continue your logic here
+
+// Rota para receber mensagens do Twilio/WhatsApp
+app.post('/webhook', async (req: Request, res: Response) => {
+  const message = req.body.Body;
+  const senderNumber = req.body.From;
+  await processMessage(message, senderNumber);
+  const twiml = new MessagingResponse();
+  res.send(twiml.toString());
+});
+
+if (require.main === module) {
+  app.listen(3000, () => {
+    console.log('Server is running on port 3000');
+  });
+}
+`
+
+My ideia to create:
+I want to create a bot on whatsapp, which makes a spreadsheet filling flow. This spreadsheet will do a day/time availability control to tradicional climbing.
+
+In this spreadsheet, there will be a sheet "Quero_Escalar" and a secondary sheet "Historico", which will store the information of each week, while the sheet "Quero_Escalar" is dynamic and changes weekly.
+In the sheet "Quero_Escalar" there will be the following columns: 'Nome', 'Telefone', 'Tipo Participante', with options (`primeiro de cordada` or `participante`), one column for each day of the week (segunda, terca, quarta, quinta, sexta, sabado, domingo), it will be a list that can be filled with values "morning", "afternoon" and "morning and afternoon (all day)".
+This spreadsheet is currently updated manually and done in google sheets. I want it to be filled in google sheets automatically, through my JS + TS application, with the following stack : twillio, gspread, express.
+
+Brainstorming: I want to use a whatsapp bot to send a weekly message in the group/community in which the user can choose the available days and times to be the `primeiro de cordada` or `participante`. Whoever answers, will be redirected to a chat with the bot. 
+
+Flux :
+ 1. The bot sends a message in the group/community on Sunday at 16:20 asking "Quer escalar essa semana? {Link}".
+     1.1 If the participante clicks on the link:
+         1.1.1 The bot will save the participante name and phone number from whatsapp.
+         1.1.2 The bot will send a message in private chat: "are you a `participante` or a `primeiro de cordada`?".
+             1.1.1.1 If the answer is `participante`:
+                1.1.1.1.1 We ask the available days of the week. participante can choose from Monday to Sunday, or all. (`participante` can choose more than one day),
+                1.1.1.1.2 The code save the anwser to use later.
+                1.1.1.1.3 After choosing the days, the person can choose 2 options: Select a button to say that any time is available or select a button to specify the times for each marked day, and may not fill in some of these days values.
+                1.1.1.1.4 If the person does not specify the time, the code need to fill in the columns "days of the week" with the value "morning and afternoon (all day)".
+                1.1.1.1.5 If the person specifies the time, the code return the option for the participante choose between the 3 available time values("manha", "tarde" e "manha e tarde(dia todo)). And the code fill in the columns "days of the week" with the specified values.
+                1.1.1.1.6 We must not forget to fill in the other columns (Nome, Telefone, Tipo Participante). the Name data will came from whatsaspp participante name, and the phone number will came from whatsapp participante phone number. The "Tipo Participante" will be filled earlier, using the chatbot.
+                1.1.1.1.7 The bot will send a message to the `participante` informing how many `primeiro de cordada` are available at the same time as this `participante`.
+
+             1.2.1.1 If the answer is `primeiro de cordada`:
+                1.2.1.1.1 We ask the available days of the week. participante can choose from Monday to Sunday, or all. (participante can choose more than one day),
+                1.2.1.1.2 The code save the anwser to use later.
+                1.2.1.1.3 After choosing the days, the person can choose 2 options: Select a button to say that any time is available or select a button to specify the times for each marked day, and may not fill in some of these days values.
+                1.2.1.1.4 If the person does not specify the time, the code need to fill in the columns "days of the week" with the value "morning and afternoon (all day)".
+                1.2.1.1.5 If the person specifies the time, the code return the option for the participante choose between the 3 available time values("manha", "tarde" e "manha e tarde(dia todo)). And the code fill in the columns "days of the week" with the specified values.
+                1.2.1.1.6 We must not forget to fill in the other columns (Nome, Telefone, Tipo Participante). the Name data will came from whatsaspp participante name, and the phone number will came from whatsapp participante phone number. The "Tipo Participante" will be filled earlier, using the chatbot.
+                1.2.1.1.7 The bot will send a message to the `primeiro de cordada` informing how many `participante` are available at the same time as this `primeiro de cordada`.
+
+                Ideias do Github Copilot. concorda?
+
+                #TODOs Requirements
+                create a method getAvailableClimbers() that returns the number of available climbers for a given day and time
+                create a method getAvailableGuides() that returns the number of available guides for a given day and time
+                create a method updateSheet() that updates the spreadsheet with the climber's information
+                create a method sendMessage() that sends a message to a given number
+                create a method processMessage() that processes the message sent by the user and calls the other methods accordingly
+                create a method getGoogleSheetsClient() that returns an authenticated instance of the Google Sheets API
+                create a method getDaysAvailable() that returns the days available for a given user
+                
+                #TODOs Instructions
+    
+                1. Create a new project on Twilio and get your account SID and auth token
+                2. Create a new project on Google Cloud Platform and enable the Google Sheets API
+                3. Create a new service account on Google Cloud Platform and download the credentials.json file
+                4. Create a new spreadsheet on Google Sheets and share it with the service account email
+                5. Create a new Twilio phone number and configure the webhook to point to your server
+                6. Create a new Express server and configure the webhook route
+                7. Create a new Twilio client and use it to send messages
+                8. Create a new Google Sheets client and use it to update the spreadsheet
+                9. Create a new method to process the messages sent by the user
+    
+    sendWhatsAppMessage('group_id', ' "Quer escalar esta semana? Clique aqui: " + `https://api.whatsapp.com/send?phone=${TWILIO_PHONE_NUMBER}&text=Oi`');
