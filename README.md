@@ -1,4 +1,4 @@
-# UDany Boilerplate
+# Escalada Project
 
 A simple project for web apps.  
 Runs on [express](https://expressjs.com/) and [vite](https://vitejs.dev/).
