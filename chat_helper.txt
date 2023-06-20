@@ -1,136 +1,58 @@
------BEGIN PRIVATE KEY-----\\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQC9FKZt3wB7JruN\\n12FzfzEcU5E4Ezj+G4IpxgNlTDm3/+T0wJ1pB1wHfqW+5lojL4NZd9GY9knzQ9MB\\nvqqAPqCcdnnjDSE0rdToCcX3/9J37GDTuoudot1iMiMhG3d5sylm0QG61hPm8CE3\\nupFnsnoWUrizGWtpJCLn/ODi51IMNpO40l6jb382+oqVIrHxNhbVJZ68T0lKH4pr\\nlsi4BXuQTc9axoimfW54zTmnr3+7Y8nZFNLypFbqp0CEZAhmvqy1/a16t9QVKnku\\nfwWO2vNEQioszZexvD3yTVp047S7tTQQ7/xWcTjuMjIY7KnwS2+JUB1YPa62odIW\\nAwz/Qh2lAgMBAAECggEAHPqIfF/YbsdzqMxI/P7SK815/P5jNnzIUPcuZ4zMbtEb\\nCdDofyOX3PUx2WVsDKb4SlLFDpy2nkA3m3WZo5CVpI065ovJWk3HCu4Oh5EPdH5H\\no8OcKMOAiw90l1sij0YgcwfW7EfponQMn0IqjVpLAFdaw+ZCMknNyMDWxafeyQyj\\n0ijZYfGSfieHcF91sv7lZ3/BNwSjcttrP9I1FTCqWIMlSVA2gbCXcnDacm7x+8yg\\nVjrjBiOacP82GWDpno8KmAb6wbvYXvAtxu2pm/ooPBK8h1+17EAZin3NeW/VBB6M\\n/NypAEi/2p8CNBN2/W3Gyo5h3O1dSDXvNPqsXO2ZuQKBgQDjuDpeyOfbVRXi3jdJ\\nQ0mBmISujEWWYlGScKodhnXQ5d8sfDwipJpAwTPjZKYQrBsi9OGXQ4fnr1WJVSzW\\nhT0Y5qx3ym0D3OdOrC1LjCwfQmaaIFnPN/J/GjfVt3eYvCBLpb3z1h/GbVGfrmIk\\nvJkbJk8JXSDZWApLVyFaDqMp/QKBgQDUj/5Frl/X7yvlWfumF4wQvoOLx7jxhXWJ\\nvejApMn5YOU4evZKWzEvYsHR5J9IG+dOb2/+nBAARUL+hvljbcO9Ahee1+27Ou5O\\np1DDdNB0APdiwUptzLDoOgQs4sDWIfza0tKc0BLy9/uF1GeDDq6vi8kkXH5V+4Ld\\nXBpD+OyeyQKBgQC69VAG7c9dxdd4MZUWc0XwPnYAkG25b/Mk1Zb1MqWb4n5+GWmN\\nz7JNI9IkCUhGO+bzpjVoaSs1TkBdxi5P2Yg1330NxIYIO980Oivd8LFw4KU4OQND\\nG93d+HqK3lw0a4/gS61OeigQU0RGY3d0Tdst7R/Kwkjr6FpbTKe3NnlDSQKBgQCu\\nF7E+CO9ev/jHw8cj5a1GGYNL/KwwxAncYro67byujvmuJKeLhtzl3pC4A/Og75mm\\n2AZ2FgPU9OVF6e5fzQq/xvLpmhiPfFip+sdfDlGccR4st/rpqvhJexroWF9wAi5C\\nWuE8pf6fGRPcLHcLE/9mr6pyKX8flPs9qa2pdjr2YQKBgQDKd88xa6fpysdNV8Kw\\n2H8/LptoJIR7JkpsFzMQKupWyyN5KDyoVI//HqFxKKQEGq79j/JMFEZOfXeGYlJq\\nBWIEOgMyO8KFoAWfM4/RczcdztU1YO67T3XfbvIaNkDuIWYiXOnwDxf1o8a237FT\\nIDjdXD23hxR5CI6F32n8v4/bKw==\\n-----END PRIVATE KEY-----\\n
+Vou repassar meu objetvo com o projeto e voce constroi a arquitetura com base no que eu pedi anteriormente.
 
-chat, I want you to IMPROVE the given code:
-import * as gspread from 'gspread';
-import * as credentials from './credentials.json';
-import { MessagingResponse } from 'twilio/lib/twiml/MessagingResponse';
-import express from 'express';
-import { Request, Response } from 'express';
-import twilio from 'twilio';
+objetivo: criar um servico que manda uma mensagem no whatsapp semanalmente (domingo as 16:20) num grupo onde ele foi adicionado anteriormente. ]
+essa mensagem vai ser um link com um inicio para uma conversa com meu bot.
+o meu bot deve ter 2 fluxos simples:
 
-const app = express();
-const client = twilio(
-  'your_account_sid',
-  'your_auth_token'
-);
+Flux :
+ 1. The bot sends a message in the group/community on Sunday at 16:20 asking "Quer escalar essa semana? {Link}".
+     1.1 If the participante clicks on the link:
+         1.1.1 The bot will save the participante name and phone number from whatsapp.
+         1.1.2 The bot will send a message in private chat: "are you a `participante` or a `primeiro de cordada`?".
+             1.1.1.1 If the answer is `participante`:
+                1.1.1.1.1 We ask the available days of the week. participante can choose from Monday to Sunday, or all. (`participante` can choose more than one day),
+                1.1.1.1.2 The code save the anwser to use later.
+                1.1.1.1.3 After choosing the days, the person can choose 2 options: Select a button to say that any time is available or select a button to specify the times for each marked day, and may not fill in some of these days values.
+                1.1.1.1.4 If the person does not specify the time, the code need to fill in the columns "days of the week" with the value "morning and afternoon (all day)".
+                1.1.1.1.5 If the person specifies the time, the code return the option for the participante choose between the 3 available time values("manha", "tarde" e "manha e tarde(dia todo)). And the code fill in the columns "days of the week" with the specified values.
+                1.1.1.1.6 We must not forget to fill in the other columns (Nome, Telefone, Tipo Participante). the Name data will came from whatsaspp participante name, and the phone number will came from whatsapp participante phone number. The "Tipo Participante" will be filled earlier, using the chatbot.
+                1.1.1.1.7 The bot will send a message to the `participante` informing how many `primeiro de cordada` are available at the same time as this `participante`.
 
-// Use creds to create a client to interact with the Google Drive API
-const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
-const SHEET_ID = 'your_sheet_id';
-const SHEET_NAME_1 = 'Horarios';
-const SHEET_NAME_2 = 'Historico';
-const TWILIO_PHONE_NUMBER = 'your_twilio_phone_number';
-
-// Função para obter uma instância autenticada do Google Sheets
-async function getGoogleSheetsClient(sheetName: string) {
-  const doc = new gspread.GoogleSpreadsheet(SHEET_ID);
-  await doc.useServiceAccountAuth(credentials);
-  await doc.loadInfo();
-  return doc.sheetsByTitle[sheetName];
-}
-
-async function sendWhatsAppMessage(to: string, message: string) {
-  await client.messages.create({
-    body: message,
-    from: `whatsapp:${TWILIO_PHONE_NUMBER}`,
-    to: `whatsapp:${to}`
-  });
-}
-
-function getAvailableClimbers() {
-// that returns the number of available climbers for a given day and time
-} 
-
-function getAvailableGuides() {
-  // that returns the number of available guides for a given day and time
-} 
-
-function getDaysAvailable() {
-  // that returns the days available for a given user
-} 
-
-// Note: You should create the following functions (getDiasDisponiveis, getOpcaoHorario,
-// atualizarPlanilhaParticipante, contarGuiasDisponiveis, atualizarPlanilhaGuia,
-// contarParticipantesDisponiveis) according to your logic and needs.
-
-async function processMessage(message: string, senderNumber: string) {
-  if (message.toLowerCase() === 'sim') {
-    await sendWhatsAppMessage(senderNumber, 'Você é participante ou guia?');
-    await sendWhatsAppMessage(senderNumber, 'Quais dias da semana você está disponível?');
-    await sendWhatsAppMessage(senderNumber, 'Você está disponível em qualquer horário ou deseja especificar horários?');
-    // Continue with your logic...
-  } else {
-    await sendWhatsAppMessage(senderNumber, 'Desculpe, não entendi sua resposta. Por favor, tente novamente.');
-    await sendWhatsAppMessage(senderNumber, 'Você gostaria de reiniciar o fluxo?');
-    // Continue with error handling logic...
-  }
-}
+             1.2.1.1 If the answer is `primeiro de cordada`:
+                1.2.1.1.1 We ask the available days of the week. participante can choose from Monday to Sunday, or all. (participante can choose more than one day),
+                1.2.1.1.2 The code save the anwser to use later.
+                1.2.1.1.3 After choosing the days, the person can choose 2 options: Select a button to say that any time is available or select a button to specify the times for each marked day, and may not fill in some of these days values.
+                1.2.1.1.4 If the person does not specify the time, the code need to fill in the columns "days of the week" with the value "morning and afternoon (all day)".
+                1.2.1.1.5 If the person specifies the time, the code return the option for the participante choose between the 3 available time values("manha", "tarde" e "manha e tarde(dia todo)). And the code fill in the columns "days of the week" with the specified values.
+                1.2.1.1.6 We must not forget to fill in the other columns (Nome, Telefone, Tipo Participante). the Name data will came from whatsaspp participante name, and the phone number will came from whatsapp participante phone number. The "Tipo Participante" will be filled earlier, using the chatbot.
+                1.2.1.1.7 The bot will send a message to the `primeiro de cordada` informing how many `participante` are available at the same time as this `primeiro de cordada`.
 
 
-interface User {
-  Nome: string;
-  Telefone: string;
-  TipoParticipante: string;
-  Dias: string[];
-  Tempo: string[];
-}
+objetivo:
+So que eu quero adicionar mais uma etapa no final de ambos os fluxos
+
+etapa adicional:
+
+Fazer uma mensagem retornando para o usuario quem esta disponivel para escalar essa semana, qual o tipo de participante e
+quais horarios e dias a pessoa pode escalar.
+Tambem quero dar uma opcao para o usuario ver o status (rever a resposta das pessoas disponveis naquela semana) apos ter terminado o fluxo
+ou ate mesmo preencher novamente.
+
+mais contexto:
+
+O meu projeto tem escala pequena, em producao vai ser usado por volta de 10 a 30 pessoas por semana.
+Ele deve usar os meios mais baratos e simples possiveis, tentar reduzir ao maximo a complexidade do projeto pois acredito que seja simples.
+Ele vai ser desenvolvido somente por 2 pessoas, eu e um amigo.
+
+mais contexto:
+
+Atualmente esse processo e feito manualmente em uma planilha, que tem as seguintes colunas:
+'Nome', 'Telefone', 'Tipo Participante', with options (`primeiro de cordada` or `participante`), one column for each day of the week (segunda, terca, quarta, quinta, sexta, sabado, domingo), it will be a list that can be filled with values "morning", "afternoon" and "morning and afternoon (all day)"
+Essa planilha eh atualizada manualmente e todas as pessoas do grupo conseguem colocar seus nomes e horarios disponiveis na semana.
 
 
-async function processMessage(message: string, senderNumber: string) {
-  let userPlanilha: any = {
-    Nome: senderNumber,
-    Telefone: senderNumber,
-    TipoParticipante: '',
-    Segunda: '', // Example date and time
-    Terca: '',
-    Quarta: '',
-    Quinta: '',
-    Sexta: '',
-    Sabado: '',
-    Domingo: ''
-  };
-  
-  // Simulate the state machine of your chat flow with if-else statements
-  if (message.toLowerCase() === 'sim') {
-    userPlanilha = {
-          Segunda: 'manha', // Example date and time
-          Terca: 'tarde',
-          Quarta: 'dia',
-          Quinta: '',
-          Sexta: '',
-          Sabado: '',
-          Domingo: ''
-      }; 
-    
-    
-    // Assume senderNumber is the name for simplicity
-
-
-    await sendWhatsAppMessage(senderNumber, 'Você é participante ou primeiro de cordada?');
-  } else if (message.toLowerCase() === 'participante' || message.toLowerCase() === 'primeiro de cordada') {
-    user.TipoParticipante = message;
-    await sendWhatsAppMessage(senderNumber, 'Quais dias da semana você está disponível?');
-  } 
-  // Continue your logic here
-
-// Rota para receber mensagens do Twilio/WhatsApp
-app.post('/webhook', async (req: Request, res: Response) => {
-  const message = req.body.Body;
-  const senderNumber = req.body.From;
-  await processMessage(message, senderNumber);
-  const twiml = new MessagingResponse();
-  res.send(twiml.toString());
-});
-
-if (require.main === module) {
-  app.listen(3000, () => {
-    console.log('Server is running on port 3000');
-  });
-}
-`
-
-My ideia to create:
-I want to create a bot on whatsapp, which makes a spreadsheet filling flow. This spreadsheet will do a day/time availability control to tradicional climbing.
+Objetivo do chat:
+Atuar como arquiteto de sistemas senior, com conhecimento vasto em web, typescript, microservicos, node e express e desings patterns atuais.
 
 In this spreadsheet, there will be a sheet "Quero_Escalar" and a secondary sheet "Historico", which will store the information of each week, while the sheet "Quero_Escalar" is dynamic and changes weekly.
 In the sheet "Quero_Escalar" there will be the following columns: 'Nome', 'Telefone', 'Tipo Participante', with options (`primeiro de cordada` or `participante`), one column for each day of the week (segunda, terca, quarta, quinta, sexta, sabado, domingo), it will be a list that can be filled with values "morning", "afternoon" and "morning and afternoon (all day)".
